@@ -1,0 +1,30 @@
+{
+  "name": "ytmdesktop-plugin",
+  "version": "1.0.0",
+  "description": "",
+  "main": ".versionrc.js",
+  "scripts": {
+    "release": "standard-version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/XeroxDev/Loupedeck-plugin-YTMDesktop.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/XeroxDev/Loupedeck-plugin-YTMDesktop/issues"
+  },
+  "homepage": "https://github.com/XeroxDev/Loupedeck-plugin-YTMDesktop#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
+    "husky": "3",
+    "standard-version": "^9.3.1"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  }
+}
