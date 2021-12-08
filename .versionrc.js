@@ -10,7 +10,7 @@ const tracker = [
     },
     {
         filename: './LoupedeckPackage.yaml',
-        type: 'yaml'
+        updater: require.resolve("standard-version-updater-yaml")
     }
 ]
 

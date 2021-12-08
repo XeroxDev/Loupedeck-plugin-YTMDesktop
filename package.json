@@ -26,5 +26,8 @@
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
+  },
+  "dependencies": {
+    "standard-version-updater-yaml": "^1.0.3"
   }
 }

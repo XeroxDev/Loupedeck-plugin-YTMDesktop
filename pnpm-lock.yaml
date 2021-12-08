@@ -5,6 +5,10 @@ specifiers:
   '@commitlint/config-conventional': ^13.1.0
   husky: '3'
   standard-version: ^9.3.1
+  standard-version-updater-yaml: ^1.0.3
+
+dependencies:
+  standard-version-updater-yaml: 1.0.3_standard-version@9.3.1
 
 devDependencies:
   '@commitlint/cli': 13.1.0
@@ -1605,6 +1609,15 @@ packages:
     resolution: {integrity: sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=}
     dev: true
 
+  /standard-version-updater-yaml/1.0.3_standard-version@9.3.1:
+    resolution: {integrity: sha512-K93X/FPgeBtYVpEi7AooHNlUu0cop98AeLKOIyBXoD4so4/7jbe9PVUVjsI4fk5iutnEVqit5oxRqZ812vEckA==}
+    peerDependencies:
+      standard-version: ^9.0.0
+    dependencies:
+      standard-version: 9.3.1
+      yaml: 1.10.2
+    dev: false
+
   /standard-version/9.3.1:
     resolution: {integrity: sha512-5qMxXw/FxLouC5nANyx/5RY1kiorJx9BppUso8gN07MG64q2uLRmrPb4KfXp3Ql4s/gxjZwZ89e0FwxeLubGww==}
     engines: {node: '>=10'}
@@ -1823,7 +1836,6 @@ packages:
   /yaml/1.10.2:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
     engines: {node: '>= 6'}
-    dev: true
 
   /yargs-parser/18.1.3:
     resolution: {integrity: sha512-o50j0JeToy/4K6OZcaQmW6lyXXKhq7csREXcDwk2omFPJEwUNOVtJKvmDr9EI1fAJZUyZcRF7kxGBWmRXudrCQ==}
