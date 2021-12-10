@@ -180,14 +180,6 @@
     <EmbeddedResource Include="Resources\Icon\icon-32.png" />
     <EmbeddedResource Include="Resources\Icon\icon-48.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\LICENSE">
-      <Link>YTMDesktopPlugin\LICENSE</Link>
-    </Content>
-    <Content Include="..\LoupedeckPackage.yaml">
-      <Link>YTMDesktopPlugin\LoupedeckPackage.yaml</Link>
-    </Content>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

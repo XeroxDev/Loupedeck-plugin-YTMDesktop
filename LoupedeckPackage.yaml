@@ -10,5 +10,5 @@ supportedDevices:
   - LoupedeckLive
 
 pluginFileName: YTMDesktopPlugin.dll
-pluginFolderWin: bin/win/
-pluginFolderMac: bin/mac/
+pluginFolderWin: ./bin/win/
+pluginFolderMac: ./bin/mac/
