@@ -1,194 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\ILMerge.3.0.41\build\ILMerge.props" Condition="Exists('..\packages\ILMerge.3.0.41\build\ILMerge.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E8F03AF3-E7CA-4125-9196-E437B93BA224}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Loupedeck.YTMDesktopPlugin</RootNamespace>
-    <AssemblyName>YTMDesktopPlugin</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <LangVersion>9</LangVersion>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <BaseIntermediateOutputPath>$(SolutionDir)obj\</BaseIntermediateOutputPath>
-    <BaseOutputPath>$(SolutionDir)bin\</BaseOutputPath>
-    <OutputPath>$(BaseOutputPath)$(Configuration)\</OutputPath>
-    <ILMergeConsolePath>$(SolutionDir)packages\ILMerge.3.0.41\tools\net452\ILMerge.exe</ILMergeConsolePath>
-    <PluginPath>C:\Users\domin\AppData\Local\Loupedeck\Plugins\</PluginPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <DebugSymbols>false</DebugSymbols>
-    <DebugType>None</DebugType>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="H.Engine.IO, Version=1.1.7.1, Culture=neutral, PublicKeyToken=56a250a977deb371">
-      <HintPath>..\packages\H.Engine.IO.1.1.7.1\lib\net45\H.Engine.IO.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="H.Socket.IO, Version=1.1.7.1, Culture=neutral, PublicKeyToken=56a250a977deb371">
-      <HintPath>..\packages\H.Socket.IO.1.1.7.1\lib\net45\H.Socket.IO.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="H.WebSockets, Version=1.2.1.0, Culture=neutral, PublicKeyToken=56a250a977deb371">
-      <HintPath>..\packages\H.WebSockets.1.2.1\lib\net45\H.WebSockets.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.5.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="mscorlib" />
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\Loupedeck\Loupedeck2\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="PluginApi, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\Loupedeck\Loupedeck2\PluginApi.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Drawing.Common, Version=4.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-      <HintPath>..\packages\System.Drawing.Common.5.0.2\lib\net461\System.Drawing.Common.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Reactive, Version=5.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263">
-      <HintPath>..\packages\System.Reactive.5.0.0\lib\net472\System.Reactive.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Text.Encodings.Web, Version=5.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-      <HintPath>..\packages\System.Text.Encodings.Web.5.0.1\lib\net461\System.Text.Encodings.Web.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Text.Json, Version=5.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-      <HintPath>..\packages\System.Text.Json.5.0.2\lib\net461\System.Text.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web" />
-    <Reference Include="System.Windows" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Classes\EventArgs\OnConnectedEvent.cs" />
-    <Compile Include="Classes\EventArgs\ServerEvents.cs" />
-    <Compile Include="Commands\DislikeCommand.cs" />
-    <Compile Include="Commands\LikeCommand.cs" />
-    <Compile Include="Commands\NextTrackCommand.cs" />
-    <Compile Include="Commands\OpenSettingsCommand.cs" />
-    <Compile Include="Commands\PlayPauseCommand.cs" />
-    <Compile Include="Commands\PreviousTrackCommand.cs" />
-    <Compile Include="Commands\RepeatCommand.cs" />
-    <Compile Include="Commands\ShuffleCommand.cs" />
-    <Compile Include="Commands\ToggleVolumeCommand.cs" />
-    <Compile Include="Commands\TrackInfoCommand.cs" />
-    <Compile Include="Commands\VolumeAdjustment.cs" />
-    <Compile Include="Enums\ErrorCode.cs" />
-    <Compile Include="Extensions\GraphicsExtensions.cs" />
-    <Compile Include="Extensions\PluginExtensions.cs" />
-    <Compile Include="GUI\Settings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Settings.Designer.cs">
-      <DependentUpon>Settings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Helper\DrawingHelper.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\SocketService.cs" />
-    <Compile Include="YTMDesktopApplication.cs" />
-    <Compile Include="YTMDesktopPlugin.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="GUI\Settings.resx">
-      <DependentUpon>Settings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PluginConfiguration.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Images\dislike-off.png" />
-    <EmbeddedResource Include="Resources\Images\dislike-on.png" />
-    <EmbeddedResource Include="Resources\Images\like-off.png" />
-    <EmbeddedResource Include="Resources\Images\like-on.png" />
-    <EmbeddedResource Include="Resources\Images\music-next.png" />
-    <EmbeddedResource Include="Resources\Images\music-pause.png" />
-    <EmbeddedResource Include="Resources\Images\music-play.png" />
-    <EmbeddedResource Include="Resources\Images\music-prev.png" />
-    <EmbeddedResource Include="Resources\Images\repeat.png" />
-    <EmbeddedResource Include="Resources\Images\shuffle.png" />
-    <EmbeddedResource Include="Resources\Images\volume-down.png" />
-    <EmbeddedResource Include="Resources\Images\volume-mute.png" />
-    <EmbeddedResource Include="Resources\Images\volume-on.png" />
-    <EmbeddedResource Include="Resources\Images\volume-up.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Images\clear.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Icon\icon-16.png" />
-    <EmbeddedResource Include="Resources\Icon\icon-256.png" />
-    <EmbeddedResource Include="Resources\Icon\icon-32.png" />
-    <EmbeddedResource Include="Resources\Icon\icon-48.png" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
     <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{E8F03AF3-E7CA-4125-9196-E437B93BA224}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>Loupedeck.YTMDesktopPlugin</RootNamespace>
+        <AssemblyName>YTMDesktopPlugin</AssemblyName>
+        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>9</LangVersion>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\ILMerge.3.0.41\build\ILMerge.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ILMerge.3.0.41\build\ILMerge.props'))" />
-  </Target>
+    <PropertyGroup>
+        <BaseIntermediateOutputPath>$(SolutionDir)obj\</BaseIntermediateOutputPath>
+        <BaseOutputPath>$(SolutionDir)bin\</BaseOutputPath>
+        <OutputPath>$(BaseOutputPath)$(Configuration)\</OutputPath>
+        <LibZPath>$(SolutionDir)packages\LibZ.Tool.1.2.0.0\tools\libz.exe</LibZPath>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <OutputPath>$(LocalAppData)\Loupedeck\Plugins\$(AssemblyName)\</OutputPath>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <Optimize>true</Optimize>
+        <DebugSymbols>false</DebugSymbols>
+        <DebugType>None</DebugType>
+        <OutputPath>$(BaseOutputPath)win\</OutputPath>
+        <PostBuildEvent>
+            cd $(OutputPath)
+            dir /s /b 
+            del *.xml
+            del *.config
+            $(LibZPath) inject-dll --assembly $(AssemblyName).dll --include *.dll --exclude $(AssemblyName).dll --move
+            cd $(SolutionDir)
+            PowerShell -command Remove-Item .\Installer -Recurse -ErrorAction Ignore
+            PowerShell -command New-Item -Path .\Installer -ItemType Directory
+            PowerShell -command Compress-Archive -Path $(SolutionDir)LoupedeckPackage.yaml,$(SolutionDir)bin -DestinationPath $(SolutionDir)Installer\$(AssemblyName).zip -CompressionLevel Fastest -Force
+            PowerShell -command Rename-Item -Path .\Installer\$(AssemblyName).zip -newName $(AssemblyName).lplug4
+        </PostBuildEvent>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="H.Engine.IO, Version=1.2.7.0, Culture=neutral, PublicKeyToken=56a250a977deb371">
+            <HintPath>..\packages\H.Engine.IO.1.2.7\lib\net45\H.Engine.IO.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="H.Socket.IO, Version=1.2.7.0, Culture=neutral, PublicKeyToken=56a250a977deb371">
+            <HintPath>..\packages\H.Socket.IO.1.2.7\lib\net45\H.Socket.IO.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="H.WebSockets, Version=1.2.7.0, Culture=neutral, PublicKeyToken=56a250a977deb371">
+            <HintPath>..\packages\H.WebSockets.1.2.7\lib\net45\H.WebSockets.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+            <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.5.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="mscorlib"/>
+        <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+            <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="PluginApi, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>C:\Program Files (x86)\Loupedeck\Loupedeck2\PluginApi.dll</HintPath>
+        </Reference>
+        <Reference Include="System"/>
+        <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+            <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Core"/>
+        <Reference Include="System.Drawing"/>
+        <Reference Include="System.Drawing.Common, Version=4.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+            <HintPath>..\packages\System.Drawing.Common.5.0.2\lib\net461\System.Drawing.Common.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+            <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Numerics"/>
+        <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Reactive, Version=5.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263">
+            <HintPath>..\packages\System.Reactive.5.0.0\lib\net472\System.Reactive.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+            <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Text.Encodings.Web, Version=5.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+            <HintPath>..\packages\System.Text.Encodings.Web.5.0.1\lib\net461\System.Text.Encodings.Web.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Text.Json, Version=5.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+            <HintPath>..\packages\System.Text.Json.5.0.2\lib\net461\System.Text.Json.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+            <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+            <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Web"/>
+        <Reference Include="System.Windows"/>
+        <Reference Include="System.Windows.Forms"/>
+        <Reference Include="System.Xml.Linq"/>
+        <Reference Include="System.Data.DataSetExtensions"/>
+        <Reference Include="Microsoft.CSharp"/>
+        <Reference Include="System.Data"/>
+        <Reference Include="System.Net.Http"/>
+        <Reference Include="System.Xml"/>
+        <Reference Include="WindowsBase"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Classes\EventArgs\OnConnectedEvent.cs"/>
+        <Compile Include="Classes\EventArgs\ServerEvents.cs"/>
+        <Compile Include="Commands\DislikeCommand.cs"/>
+        <Compile Include="Commands\LikeCommand.cs"/>
+        <Compile Include="Commands\NextTrackCommand.cs"/>
+        <Compile Include="Commands\OpenSettingsCommand.cs"/>
+        <Compile Include="Commands\PlayPauseCommand.cs"/>
+        <Compile Include="Commands\PreviousTrackCommand.cs"/>
+        <Compile Include="Commands\RepeatCommand.cs"/>
+        <Compile Include="Commands\ShuffleCommand.cs"/>
+        <Compile Include="Commands\ToggleVolumeCommand.cs"/>
+        <Compile Include="Commands\TrackInfoCommand.cs"/>
+        <Compile Include="Commands\VolumeAdjustment.cs"/>
+        <Compile Include="Enums\ErrorCode.cs"/>
+        <Compile Include="Extensions\GraphicsExtensions.cs"/>
+        <Compile Include="Extensions\PluginExtensions.cs"/>
+        <Compile Include="GUI\Settings.cs">
+            <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="GUI\Settings.Designer.cs">
+            <DependentUpon>Settings.cs</DependentUpon>
+        </Compile>
+        <Compile Include="Helper\DrawingHelper.cs"/>
+        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="Services\SocketService.cs"/>
+        <Compile Include="YTMDesktopApplication.cs"/>
+        <Compile Include="YTMDesktopPlugin.cs"/>
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="GUI\Settings.resx">
+            <DependentUpon>Settings.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="PluginConfiguration.json"/>
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="App.config"/>
+        <None Include="packages.config"/>
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\Images\dislike-off.png"/>
+        <EmbeddedResource Include="Resources\Images\dislike-on.png"/>
+        <EmbeddedResource Include="Resources\Images\like-off.png"/>
+        <EmbeddedResource Include="Resources\Images\like-on.png"/>
+        <EmbeddedResource Include="Resources\Images\music-next.png"/>
+        <EmbeddedResource Include="Resources\Images\music-pause.png"/>
+        <EmbeddedResource Include="Resources\Images\music-play.png"/>
+        <EmbeddedResource Include="Resources\Images\music-prev.png"/>
+        <EmbeddedResource Include="Resources\Images\repeat.png"/>
+        <EmbeddedResource Include="Resources\Images\shuffle.png"/>
+        <EmbeddedResource Include="Resources\Images\volume-down.png"/>
+        <EmbeddedResource Include="Resources\Images\volume-mute.png"/>
+        <EmbeddedResource Include="Resources\Images\volume-on.png"/>
+        <EmbeddedResource Include="Resources\Images\volume-up.png"/>
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\Images\clear.png"/>
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\Icon\icon-16.png"/>
+        <EmbeddedResource Include="Resources\Icon\icon-256.png"/>
+        <EmbeddedResource Include="Resources\Icon\icon-32.png"/>
+        <EmbeddedResource Include="Resources\Icon\icon-48.png"/>
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
 
-  <PropertyGroup>
-    <PostBuildEvent>$(ILMergeConsolePath) /out:$(PluginPath)YTMDesktopPlugin.dll $(OutputPath)YTMDesktopPlugin.dll $(OutputPath)H.Engine.IO.dll $(OutputPath)H.Socket.IO.dll $(OutputPath)H.WebSockets.dll $(OutputPath)Microsoft.Bcl.AsyncInterfaces.dll $(OutputPath)System.Reactive.dll $(OutputPath)System.Text.Encodings.Web.dll $(OutputPath)System.Text.Json.dll $(OutputPath)System.Threading.Tasks.Extensions.dll $(OutputPath)System.ValueTuple.dll $(OutputPath)System.Drawing.Common.dll</PostBuildEvent>
-  </PropertyGroup>
 </Project>
