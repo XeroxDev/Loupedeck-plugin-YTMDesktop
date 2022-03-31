@@ -1,16 +1,8 @@
 ﻿namespace Loupedeck.YTMDesktopPlugin.Commands
 {
     using System;
-    using System.Drawing;
-    using System.Drawing.Imaging;
-    using System.IO;
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
-    using System.Runtime.InteropServices;
-
-    using Extensions;
-
-    using Helper;
 
     using Services;
 
@@ -60,10 +52,19 @@
             return base.OnUnload();
         }
 
-        public VolumeAdjustment() : base("Change volume", "Changes player volume", "Player", false) =>
+        public VolumeAdjustment() : base("Change volume", "Changes player volume", "Player", true) =>
             this.SocketService = SocketService.Instance;
 
-        protected override String GetCommandDisplayName(String actionParameter, PluginImageSize imageSize) => "Volume";
+        protected override String GetCommandDisplayName(String actionParameter, PluginImageSize imageSize) => "Toggle volume";
+
+        protected override async void RunCommand(String actionParameter)
+        {
+            var vol = OnVolume.Value == 0
+                ? LastVolume
+                : -1;
+            OnVolume.OnNext(vol);
+            await this.SocketService.PlayerSetVolume(vol);
+        }
 
         protected override async void ApplyAdjustment(String actionParameter, Int32 diff)
         {
@@ -88,30 +89,7 @@
             await this.SocketService.PlayerSetVolume(vol);
         }
 
-        protected override BitmapImage GetAdjustmentImage(String actionParameter, PluginImageSize imageSize)
-        {
-            var bitmap = new Bitmap(70, 20);
-            var g = Graphics.FromImage(bitmap);
-
-            var percentage = OnVolume.Value;
-            var bgColor = Color.FromArgb(156, 156, 156);
-            var textColor = Color.White;
-            var rect = new Rectangle(0, 0, bitmap.Width - 1, bitmap.Height - 1);
-            var font = new Font("Arial", 20, FontStyle.Bold);
-            var brush = new SolidBrush(Color.White);
-            var width = (Int32)(rect.Width * percentage / 100.0);
-            var sf = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
-
-            g.DrawRectangle(new Pen(bgColor), rect);
-            g.FillRectangle(new SolidBrush(bgColor), 0, 0, width, rect.Height);
-            g.FillRectangle(new SolidBrush(Color.FromArgb(150, 0, 0, 0)), 0, 0, bitmap.Width, bitmap.Height);
-            g.DrawAutoAdjustedFont($"{percentage}%", font, brush, rect, sf, 12);
-
-            bitmap.RotateFlip(RotateFlipType.Rotate270FlipNone);
-
-            var ms = new MemoryStream();
-            bitmap.Save(ms, ImageFormat.Png);
-            return new BitmapImage(ms.ToArray());
-        }
+        protected override BitmapImage GetAdjustmentImage(String actionParameter, PluginImageSize imageSize) =>
+            DrawVolumeBar(imageSize, new BitmapColor(156, 156, 156), BitmapColor.White, OnVolume.Value);
     }
 }

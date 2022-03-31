@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -63,7 +63,7 @@
             <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.5.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
             <Private>True</Private>
         </Reference>
-        <Reference Include="mscorlib"/>
+        <Reference Include="mscorlib" />
         <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
             <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
             <Private>True</Private>
@@ -72,13 +72,13 @@
             <SpecificVersion>False</SpecificVersion>
             <HintPath>C:\Program Files (x86)\Loupedeck\Loupedeck2\PluginApi.dll</HintPath>
         </Reference>
-        <Reference Include="System"/>
+        <Reference Include="System" />
         <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
             <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
             <Private>True</Private>
         </Reference>
-        <Reference Include="System.Core"/>
-        <Reference Include="System.Drawing"/>
+        <Reference Include="System.Core" />
+        <Reference Include="System.Drawing" />
         <Reference Include="System.Drawing.Common, Version=4.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
             <HintPath>..\packages\System.Drawing.Common.5.0.2\lib\net461\System.Drawing.Common.dll</HintPath>
             <Private>True</Private>
@@ -87,7 +87,7 @@
             <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
             <Private>True</Private>
         </Reference>
-        <Reference Include="System.Numerics"/>
+        <Reference Include="System.Numerics" />
         <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
             <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
             <Private>True</Private>
@@ -116,81 +116,80 @@
             <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
             <Private>True</Private>
         </Reference>
-        <Reference Include="System.Web"/>
-        <Reference Include="System.Windows"/>
-        <Reference Include="System.Windows.Forms"/>
-        <Reference Include="System.Xml.Linq"/>
-        <Reference Include="System.Data.DataSetExtensions"/>
-        <Reference Include="Microsoft.CSharp"/>
-        <Reference Include="System.Data"/>
-        <Reference Include="System.Net.Http"/>
-        <Reference Include="System.Xml"/>
-        <Reference Include="WindowsBase"/>
+        <Reference Include="System.Web" />
+        <Reference Include="System.Windows" />
+        <Reference Include="System.Windows.Forms" />
+        <Reference Include="System.Xml.Linq" />
+        <Reference Include="System.Data.DataSetExtensions" />
+        <Reference Include="Microsoft.CSharp" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Net.Http" />
+        <Reference Include="System.Xml" />
+        <Reference Include="WindowsBase" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Classes\EventArgs\OnConnectedEvent.cs"/>
-        <Compile Include="Classes\EventArgs\ServerEvents.cs"/>
-        <Compile Include="Commands\DislikeCommand.cs"/>
-        <Compile Include="Commands\LikeCommand.cs"/>
-        <Compile Include="Commands\NextTrackCommand.cs"/>
-        <Compile Include="Commands\OpenSettingsCommand.cs"/>
-        <Compile Include="Commands\PlayPauseCommand.cs"/>
-        <Compile Include="Commands\PreviousTrackCommand.cs"/>
-        <Compile Include="Commands\RepeatCommand.cs"/>
-        <Compile Include="Commands\ShuffleCommand.cs"/>
-        <Compile Include="Commands\ToggleVolumeCommand.cs"/>
-        <Compile Include="Commands\TrackInfoCommand.cs"/>
-        <Compile Include="Commands\VolumeAdjustment.cs"/>
-        <Compile Include="Enums\ErrorCode.cs"/>
-        <Compile Include="Extensions\GraphicsExtensions.cs"/>
-        <Compile Include="Extensions\PluginExtensions.cs"/>
+        <Compile Include="Classes\EventArgs\OnConnectedEvent.cs" />
+        <Compile Include="Classes\EventArgs\ServerEvents.cs" />
+        <Compile Include="Commands\DislikeCommand.cs" />
+        <Compile Include="Commands\LikeCommand.cs" />
+        <Compile Include="Commands\NextTrackCommand.cs" />
+        <Compile Include="Commands\OpenSettingsCommand.cs" />
+        <Compile Include="Commands\PlayPauseCommand.cs" />
+        <Compile Include="Commands\PreviousTrackCommand.cs" />
+        <Compile Include="Commands\RepeatCommand.cs" />
+        <Compile Include="Commands\ShuffleCommand.cs" />
+        <Compile Include="Commands\TrackInfoCommand.cs" />
+        <Compile Include="Commands\VolumeAdjustment.cs" />
+        <Compile Include="Enums\ErrorCode.cs" />
+        <Compile Include="Extensions\GraphicsExtensions.cs" />
+        <Compile Include="Extensions\PluginExtensions.cs" />
         <Compile Include="GUI\Settings.cs">
             <SubType>Form</SubType>
         </Compile>
         <Compile Include="GUI\Settings.Designer.cs">
             <DependentUpon>Settings.cs</DependentUpon>
         </Compile>
-        <Compile Include="Helper\DrawingHelper.cs"/>
-        <Compile Include="Properties\AssemblyInfo.cs"/>
-        <Compile Include="Services\SocketService.cs"/>
-        <Compile Include="YTMDesktopApplication.cs"/>
-        <Compile Include="YTMDesktopPlugin.cs"/>
+        <Compile Include="Helper\DrawingHelper.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Services\SocketService.cs" />
+        <Compile Include="YTMDesktopApplication.cs" />
+        <Compile Include="YTMDesktopPlugin.cs" />
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="GUI\Settings.resx">
             <DependentUpon>Settings.cs</DependentUpon>
         </EmbeddedResource>
-        <EmbeddedResource Include="PluginConfiguration.json"/>
+        <EmbeddedResource Include="PluginConfiguration.json" />
     </ItemGroup>
     <ItemGroup>
-        <None Include="App.config"/>
-        <None Include="packages.config"/>
+        <None Include="App.config" />
+        <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Include="Resources\Images\dislike-off.png"/>
-        <EmbeddedResource Include="Resources\Images\dislike-on.png"/>
-        <EmbeddedResource Include="Resources\Images\like-off.png"/>
-        <EmbeddedResource Include="Resources\Images\like-on.png"/>
-        <EmbeddedResource Include="Resources\Images\music-next.png"/>
-        <EmbeddedResource Include="Resources\Images\music-pause.png"/>
-        <EmbeddedResource Include="Resources\Images\music-play.png"/>
-        <EmbeddedResource Include="Resources\Images\music-prev.png"/>
-        <EmbeddedResource Include="Resources\Images\repeat.png"/>
-        <EmbeddedResource Include="Resources\Images\shuffle.png"/>
-        <EmbeddedResource Include="Resources\Images\volume-down.png"/>
-        <EmbeddedResource Include="Resources\Images\volume-mute.png"/>
-        <EmbeddedResource Include="Resources\Images\volume-on.png"/>
-        <EmbeddedResource Include="Resources\Images\volume-up.png"/>
+        <EmbeddedResource Include="Resources\Images\dislike-off.png" />
+        <EmbeddedResource Include="Resources\Images\dislike-on.png" />
+        <EmbeddedResource Include="Resources\Images\like-off.png" />
+        <EmbeddedResource Include="Resources\Images\like-on.png" />
+        <EmbeddedResource Include="Resources\Images\music-next.png" />
+        <EmbeddedResource Include="Resources\Images\music-pause.png" />
+        <EmbeddedResource Include="Resources\Images\music-play.png" />
+        <EmbeddedResource Include="Resources\Images\music-prev.png" />
+        <EmbeddedResource Include="Resources\Images\repeat.png" />
+        <EmbeddedResource Include="Resources\Images\shuffle.png" />
+        <EmbeddedResource Include="Resources\Images\volume-down.png" />
+        <EmbeddedResource Include="Resources\Images\volume-mute.png" />
+        <EmbeddedResource Include="Resources\Images\volume-on.png" />
+        <EmbeddedResource Include="Resources\Images\volume-up.png" />
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Include="Resources\Images\clear.png"/>
+        <EmbeddedResource Include="Resources\Images\clear.png" />
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Include="Resources\Icon\icon-16.png"/>
-        <EmbeddedResource Include="Resources\Icon\icon-256.png"/>
-        <EmbeddedResource Include="Resources\Icon\icon-32.png"/>
-        <EmbeddedResource Include="Resources\Icon\icon-48.png"/>
+        <EmbeddedResource Include="Resources\Icon\icon-16.png" />
+        <EmbeddedResource Include="Resources\Icon\icon-256.png" />
+        <EmbeddedResource Include="Resources\Icon\icon-32.png" />
+        <EmbeddedResource Include="Resources\Icon\icon-48.png" />
     </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 
 </Project>
