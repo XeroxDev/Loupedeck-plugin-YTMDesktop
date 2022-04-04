@@ -65,7 +65,7 @@
                         this.CurrentThumbnail = cover;
                         using var ms = new MemoryStream();
                         GetImageAsStream(cover).CopyTo(ms);
-                        this.ThumbnailBitmap = new BitmapImage(ms.ToArray());
+                        this.ThumbnailBitmap = BitmapImage.FromArray(ms.ToArray());
                         this.ThumbnailBitmap.Resize(90, 90);
                     }
 
