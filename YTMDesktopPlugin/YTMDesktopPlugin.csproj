@@ -32,10 +32,10 @@
         <Optimize>true</Optimize>
         <DebugSymbols>false</DebugSymbols>
         <DebugType>None</DebugType>
-        <OutputPath>$(BaseOutputPath)win\</OutputPath>
+        <OutputPath>$(BaseOutputPath)plugin\</OutputPath>
         <PostBuildEvent>
             cd $(OutputPath)
-            dir /s /b 
+            dir /s /b
             del *.xml
             del *.config
             $(LibZPath) inject-dll --assembly $(AssemblyName).dll --include *.dll --exclude $(AssemblyName).dll --move
