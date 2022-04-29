@@ -8,8 +8,7 @@ supportedDevices:
   - LoupedeckCt
   - LoupedeckLive
 pluginFileName: YTMDesktopPlugin.dll
-pluginFolderWin: ./bin/plugin/
-pluginFolderMac: ./bin/plugin/
+pluginFolderWin: bin/win/
 license: MIT
 licenseUrl: https://opensource.org/licenses/MIT
 homePageUrl: https://help.xeroxdev.de/en/loupedeck/ytmd/home
