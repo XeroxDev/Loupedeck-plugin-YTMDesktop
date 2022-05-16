@@ -152,7 +152,6 @@
 
             if (isPaused)
             {
-                data.Track.Cover = "Paused";
                 data.Track.Title = "Paused";
                 data.Track.Author = "Paused";
                 data.Track.Album = "Paused";
