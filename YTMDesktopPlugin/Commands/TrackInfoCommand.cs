@@ -9,6 +9,8 @@
 
     using Classes.EventArgs;
 
+    using Helper;
+
     using Services;
 
     using static Helper.DrawingHelper;
@@ -26,7 +28,6 @@
         private String CurrentAlbum { get; set; } = "";
         private String CurrentThumbnail { get; set; } = "";
         private String CurrentUrl { get; set; } = "";
-        private String PlaceholderCover { get; } = "https://via.placeholder.com/128?text=";
 
         private String DisplayTitle { get; set; } = "Nothing";
         private BitmapImage ThumbnailBitmap { get; set; }
@@ -63,9 +64,24 @@
                     if (this.CurrentThumbnail != cover)
                     {
                         this.CurrentThumbnail = cover;
-                        using var ms = new MemoryStream();
-                        GetImageAsStream(cover).CopyTo(ms);
-                        this.ThumbnailBitmap = BitmapImage.FromArray(ms.ToArray());
+                        if (!cover.StartsWith("http"))
+                        {
+                            this.ThumbnailBitmap = LoadBitmapImage(text: cover);
+                        }
+                        else
+                        {
+                            try
+                            {
+                                using var ms = new MemoryStream();
+                                GetImageAsStream(cover).CopyTo(ms);
+                                this.ThumbnailBitmap = BitmapImage.FromArray(ms.ToArray());
+                            }
+                            catch
+                            {
+                                this.ThumbnailBitmap = LoadBitmapImage(text: "Not found");
+                            }
+                        }
+
                         this.ThumbnailBitmap.Resize(90, 90);
                     }
 
@@ -136,14 +152,14 @@
 
             if (isPaused)
             {
-                data.Track.Cover = this.PlaceholderCover + "Paused";
+                data.Track.Cover = "Paused";
                 data.Track.Title = "Paused";
                 data.Track.Author = "Paused";
                 data.Track.Album = "Paused";
             }
             else if (!hasSong)
             {
-                data.Track.Cover = this.PlaceholderCover + "N%2FA";
+                data.Track.Cover = "N/A";
                 data.Track.Title = "N/A";
                 data.Track.Author = "N/A";
                 data.Track.Album = "N/A";
