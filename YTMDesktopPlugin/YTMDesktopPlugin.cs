@@ -4,6 +4,8 @@ namespace Loupedeck.YTMDesktopPlugin
     using System.Reactive.Linq;
     using System.Reactive.Subjects;
 
+    using Commands;
+
     using Enums;
 
     using Extensions;
@@ -26,6 +28,7 @@ namespace Loupedeck.YTMDesktopPlugin
             this.Info.Icon32x32 = DrawingHelper.ReadImage("icon-32", addPath: "Icon");
             this.Info.Icon48x48 = DrawingHelper.ReadImage("icon-48", addPath: "Icon");
             this.Info.Icon256x256 = DrawingHelper.ReadImage("icon-256", addPath: "Icon");
+            this.FetchSettings();
             SocketService.Instance.IsConnected
                 .DistinctUntilChanged()
                 .TakeUntil(this.OnDestroy)
@@ -40,6 +43,18 @@ namespace Loupedeck.YTMDesktopPlugin
                         this.SetStatus(Loupedeck.PluginStatus.Error, ErrorCode.CouldNotConnect);
                     }
                 });
+        }
+
+        private void FetchSettings()
+        {
+            this.TryGetSetting("host", out var host);
+            this.TryGetSetting("port", out var port);
+            this.TryGetSetting("password", out var password);
+            this.TryGetSetting("playPauseFormat", out var playPauseFormat);
+
+            var socketInstance = SocketService.Instance;
+            socketInstance.SetSettings(host ?? "127.0.0.1", port ?? "9863", password ?? "").Wait();
+            PlayPauseCommand.Format = playPauseFormat ?? "{current}";
         }
 
         public override void Unload()
@@ -58,10 +73,10 @@ namespace Loupedeck.YTMDesktopPlugin
 
         public Boolean TryGetSetting(String settingName, out String settingValue) =>
             this.TryGetPluginSetting(settingName, out settingValue);
-        
+
         public void SetSetting(String settingName, String settingValue, Boolean backupOnline = false) =>
             this.SetPluginSetting(settingName, settingValue, backupOnline);
-        
+
         public void DeleteSetting(String settingName) =>
             this.DeletePluginSetting(settingName);
     }

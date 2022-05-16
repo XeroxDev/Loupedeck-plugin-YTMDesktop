@@ -5,6 +5,8 @@
     using System.Threading;
     using System.Windows.Forms;
 
+    using Commands;
+
     using Services;
 
     public partial class Settings : Form
@@ -26,9 +28,12 @@
             this._plugin.TryGetSetting("host", out var host);
             this._plugin.TryGetSetting("port", out var port);
             this._plugin.TryGetSetting("password", out var password);
+            this._plugin.TryGetSetting("playPauseFormat", out var playPauseFormat);
             this.hostBox.Text = host ?? "127.0.0.1";
             this.portBox.Text = port ?? "9863";
             this.passwordBox.Text = password ?? "";
+            this.textBox1.Text = playPauseFormat ?? "{current}";
+            this.displayPreviewLabel.Text = PlayPauseCommand.FormatTitle(playPauseFormat, 91, 180, 89);
         }
 
         private void panel1_MouseDown(Object sender, MouseEventArgs e)
@@ -74,6 +79,8 @@
             {
                 var settingsWindow = new Settings();
                 settingsWindow.Show();
+                // put in foreground
+                settingsWindow.Activate();
                 System.Windows.Threading.Dispatcher.Run();
             });
 
@@ -86,6 +93,8 @@
             this._plugin.SetSetting("host", this.hostBox.Text);
             this._plugin.SetSetting("port", this.portBox.Text);
             this._plugin.SetSetting("password", this.passwordBox.Text);
+            this._plugin.SetSetting("playPauseFormat", this.textBox1.Text);
+            PlayPauseCommand.Format = this.textBox1.Text;
             SocketService.Instance.SetSettings(this.hostBox.Text, this.portBox.Text, this.passwordBox.Text)
                 .GetAwaiter();
             this.Close();
@@ -94,5 +103,7 @@
         private void Settings_Shown(Object sender, EventArgs e) => IsOpen = true;
 
         private void Settings_FormClosed(Object sender, FormClosedEventArgs e) => IsOpen = false;
+
+        private void textBox1_TextChanged(Object sender, EventArgs e) => this.displayPreviewLabel.Text = PlayPauseCommand.FormatTitle(this.textBox1.Text, 91, 180, 89);
     }
 }
