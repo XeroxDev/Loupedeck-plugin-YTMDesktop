@@ -1,6 +1,6 @@
-﻿name: Release
+name: Release
 
-on:
+on: 
   push:
     branches:
       - main
