@@ -68,7 +68,14 @@
             {
                 this.OnError.OnNext(e.Message);
                 await Task.Delay(1000);
-                await this.StartConnection();
+                try
+                {
+                    await this.StartConnection();
+                }
+                catch (Exception ex)
+                {
+                    this.OnError.OnNext(ex.Message);
+                }
             }
         }
 
@@ -121,10 +128,19 @@
 
         public async Task Disconnect() => await this.Client.DisconnectAsync();
 
-        private async Task Emit(String evt = "media-commands", String cmd = "player-rewind", Object value = null) =>
-            await this.Client
-                .SendEventAsync(
-                    $"[{String.Join(",", $"\"{evt}\"", $"\"{cmd}\"", JsonConvert.SerializeObject(value ?? true))}]")
-                .ConfigureAwait(false);
+        private async Task Emit(String evt = "media-commands", String cmd = "player-rewind", Object value = null)
+        {
+            try
+            {
+                await this.Client
+                    .SendEventAsync(
+                        $"[{String.Join(",", $"\"{evt}\"", $"\"{cmd}\"", JsonConvert.SerializeObject(value ?? true))}]")
+                    .ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                this.OnError.OnNext(e.Message);
+            }
+        }
     }
 }
