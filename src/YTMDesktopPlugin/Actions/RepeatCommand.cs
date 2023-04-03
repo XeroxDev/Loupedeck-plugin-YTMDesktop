@@ -8,15 +8,27 @@
 
     using Utils;
 
-    public class RepeatCommand : PluginDynamicCommand
+    public class RepeatCommand : PluginMultistateDynamicCommand
     {
+        private enum RepeatType
+        {
+            None,
+            All,
+            One
+        }
+
         private SocketService SocketService { get; }
         private Subject<Boolean> OnDestroy { get; } = new Subject<Boolean>();
-        private String _repeatType = "None";
 
+        public RepeatCommand() : base("Repeat", "Toggles repeat types", "Player")
+        {
+            foreach (var state in Enum.GetValues(typeof(RepeatType)))
+            {
+                this.AddState(state.ToString(), $"If current repeat type is {state}");
+            }
 
-        public RepeatCommand() : base("Repeat", "Toggles repeat types", "Player") =>
             this.SocketService = SocketService.Instance;
+        }
 
         protected override Boolean OnLoad()
         {
@@ -26,7 +38,7 @@
                 .TakeUntil(this.OnDestroy)
                 .Subscribe(repeatType =>
                 {
-                    this._repeatType = repeatType;
+                    this.SetCurrentState((Int32)Enum.Parse(typeof(RepeatType), repeatType, true));
                     this.ActionImageChanged();
                 });
 
@@ -41,7 +53,7 @@
 
         protected override async void RunCommand(String actionParameter) => await this.SocketService.PlayerRepeat();
 
-        protected override BitmapImage GetCommandImage(String actionParameter, PluginImageSize imageSize) =>
-           DrawingHelper.LoadBitmapImage("repeat", this._repeatType);
+        protected override BitmapImage GetCommandImage(String actionParameter, Int32 state, PluginImageSize imageSize) =>
+            DrawingHelper.LoadBitmapImage("repeat", Enum.GetName(typeof(RepeatType), state));
     }
 }
