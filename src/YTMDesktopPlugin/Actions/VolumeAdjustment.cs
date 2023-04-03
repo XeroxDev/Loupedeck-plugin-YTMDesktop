@@ -84,7 +84,16 @@
             await this.SocketService.PlayerSetVolume(vol);
         }
 
-        protected override BitmapImage GetAdjustmentImage(String actionParameter, PluginImageSize imageSize) =>
-            DrawingHelper.DrawVolumeBar(imageSize, new BitmapColor(156, 156, 156), BitmapColor.White, OnVolume.Value);
+        protected override BitmapImage GetAdjustmentImage(String actionParameter, PluginImageSize imageSize)
+        {
+            try
+            {
+                return DrawingHelper.DrawVolumeBar(imageSize, new BitmapColor(156, 156, 156), BitmapColor.White, OnVolume.Value);
+            }
+            catch (Exception)
+            {
+                return base.GetAdjustmentImage(actionParameter, imageSize);
+            }
+        }
     }
 }
