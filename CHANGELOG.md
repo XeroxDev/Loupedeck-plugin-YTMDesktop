@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0](https://github.com/XeroxDev/Loupedeck-plugin-YTMDesktop/compare/v2.1.0...v3.0.0) (2024-09-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* migration to v6 ([#2](https://github.com/XeroxDev/Loupedeck-plugin-YTMDesktop/issues/2))
+
+### Features
+
+* migration to v6 ([#2](https://github.com/XeroxDev/Loupedeck-plugin-YTMDesktop/issues/2)) ([35ebe4d](https://github.com/XeroxDev/Loupedeck-plugin-YTMDesktop/commit/35ebe4d75accaa556b499b152ad9e1aa6aa1b992))
+
 ## v2.1.0 (2022-05-16)
 
 ### Feat
