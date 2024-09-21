@@ -1,18 +1,38 @@
-﻿namespace Loupedeck.YTMDesktopPlugin.Actions
+﻿namespace Loupedeck.YTMDesktopPlugin.Actions;
+
+using Helpers;
+
+public class OpenSettingsCommand : ActionEditorCommand
 {
-    using System;
-
-    using GUI;
-
-    using Utils;
-
-    public class OpenSettingsCommand : PluginDynamicCommand
+    public OpenSettingsCommand()
     {
-        public OpenSettingsCommand() : base("Open Settings", "Opens the settings", "General") {}
+        this.DisplayName = "Settings Profile";
+        this.GroupName = "General";
+        this.Name = "Settings";
 
-        protected override void RunCommand(String actionParameter) => Settings.Open();
+        this.ActionEditor.AddControlEx(new ActionEditorTextbox("host", "Host", "The host of the YTMDesktop Companion").SetRequired());
+        this.ActionEditor.AddControlEx(new ActionEditorTextbox("port", "Port", "The port of the YTMDesktop Companion").SetRequired()
+            .SetFormat(ActionEditorTextboxFormat.Integer));
+        
+    }
 
-        protected override BitmapImage GetCommandImage(String actionParameter, PluginImageSize imageSize) =>
-            DrawingHelper.LoadBitmapImage(text: "Open settings");
+    protected override Boolean RunCommand(ActionEditorActionParameters actionParameters)
+    {
+        var hostSuccess = actionParameters.TryGetString("host", out var host);
+        var portSuccess = actionParameters.TryGetInt32("port", out var port);
+
+        if (hostSuccess)
+        {
+            this.Plugin.SetPluginSetting("host", host);
+        }
+
+        if (portSuccess)
+        {
+            this.Plugin.SetPluginSetting("port", port.ToString());
+        }
+
+        _ = Connector.Init(this.Plugin, true);
+
+        return true;
     }
 }

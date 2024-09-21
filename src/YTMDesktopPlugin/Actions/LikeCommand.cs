@@ -1,51 +1,62 @@
-﻿namespace Loupedeck.YTMDesktopPlugin.Actions
+﻿namespace Loupedeck.YTMDesktopPlugin.Actions;
+
+using Helpers;
+
+using XeroxDev.YTMDesktop.Companion.Enums;
+using XeroxDev.YTMDesktop.Companion.Exceptions;
+using XeroxDev.YTMDesktop.Companion.Models.Output;
+
+public class LikeCommand : PluginMultistateDynamicCommand
 {
-    using System;
-    using System.Reactive.Linq;
-    using System.Reactive.Subjects;
+    private Boolean _liked;
 
-    using Services;
-
-    using Utils;
-
-    public class LikeCommand : PluginMultistateDynamicCommand
+    public LikeCommand() : base("Like", "Likes track", "Track")
     {
-        private SocketService SocketService { get; }
-        private Subject<Boolean> OnDestroy { get; } = new Subject<Boolean>();
-
-        private Boolean Liked { get; set; }
-
-        public LikeCommand() : base("Like", "Likes track", "Track")
-        {
-            this.AddState("Neutral", "If current song is not liked");
-            this.AddState("Liked", "If current song is liked");
-            this.SocketService = SocketService.Instance;
-        }
-
-        protected override Boolean OnLoad()
-        {
-            this.SocketService.OnTick
-                .Select(response => response.Player.LikeStatus == "LIKE")
-                .DistinctUntilChanged(b => b == this.Liked)
-                .TakeUntil(this.OnDestroy)
-                .Subscribe(liked =>
-                {
-                    this.Liked = liked;
-                    this.SetCurrentState(liked ? 1 : 0);
-                    this.ActionImageChanged();
-                });
-            return base.OnLoad();
-        }
-
-        protected override Boolean OnUnload()
-        {
-            this.OnDestroy.OnNext(true);
-            return base.OnUnload();
-        }
-
-        protected override async void RunCommand(String actionParameter) => await this.SocketService.TrackThumbsUp();
-
-        protected override BitmapImage GetCommandImage(String actionParameter, Int32 state, PluginImageSize imageSize) =>
-            DrawingHelper.LoadBitmapImage($"like-{(state == 1 ? "on" : "off")}");
+        this.AddState("Neutral", "If current song is not liked");
+        this.AddState("Liked", "If current song is liked");
     }
+
+    protected override Boolean OnLoad()
+    {
+        Connector.OnStateChange += this.OnStateChange;
+        return base.OnUnload();
+    }
+
+    protected override Boolean OnUnload()
+    {
+        Connector.OnStateChange -= this.OnStateChange;
+        return base.OnUnload();
+    }
+
+    private void OnStateChange(Object? _, StateOutput e)
+    {
+        if (e.Video?.LikeStatus is null or ELikeStatus.Unknown)
+        {
+            return;
+        }
+
+        this._liked = e.Video.LikeStatus == ELikeStatus.Like;
+        this.SetCurrentState(this._liked ? 1 : 0);
+        this.ActionImageChanged();
+    }
+
+    protected override async void RunCommand(String actionParameter)
+    {
+        try
+        {
+            await (Connector.RestClient?.ToggleLike() ?? Task.CompletedTask);
+            this.Plugin.OnPluginStatusChanged(PluginStatus.Normal, "");
+        }
+        catch (ApiException e)
+        {
+            this.Plugin.OnPluginStatusChanged(PluginStatus.Error, e.Error.ToString());
+        }
+        catch (Exception e)
+        {
+            this.Plugin.OnPluginStatusChanged(PluginStatus.Error, e.Message);
+        }
+    }
+
+    protected override BitmapImage GetCommandImage(String actionParameter, Int32 state, PluginImageSize imageSize) =>
+        DrawingHelper.LoadBitmapImage($"like-{(state == 1 ? "on" : "off")}");
 }

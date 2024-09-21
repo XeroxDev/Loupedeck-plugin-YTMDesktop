@@ -5,11 +5,14 @@
 # Package type. Must be plugin4 for plugins.
 type: plugin4
 
-# Name of the plugin.
+# Name that identifies the plugin.
 name: YTMDesktop
 
-# Name that is displayed in the Loupedeck configuration application.
+# Plugin name that is shown to the user.
 displayName: YTMDesktop
+
+# Short description of the plugin.
+description: This Plugin allows you to control the YouTube Music Desktop App
 
 # Name of the plugin library file.
 pluginFileName: YTMDesktopPlugin.dll
@@ -21,7 +24,7 @@ version: 2.1.0
 author: XeroxDev
 
 # Copyright information.
-copyright: Copyright (c) 2021-2023 Dominic Ris
+copyright: Copyright © 2021-2024 Dominic Ris. All rights reserved.
 
 
 # ==================================================================================================
@@ -30,15 +33,16 @@ copyright: Copyright (c) 2021-2023 Dominic Ris
 
 # Location of plugin files on Windows (relative to the plugin base directory).
 # This parameter is required to support Windows.
-pluginFolderWin: win
+pluginFolderWin: .
 
 # Location of plugin files on macOS (relative to the plugin base directory).
 # This parameter is required to support Mac.
-#pluginFolderMac: mac
+#pluginFolderMac: .
 
-# List of supported devices.
+# List of devices the plugin is optimized for.
 supportedDevices:
-    # LoupedeckCtFamily covers the following devices: Loupedeck CT, Live and Live S, and Razer Stream Controller.
+    # LoupedeckCtFamily covers the following devices: Loupedeck CT, Live and Live S,
+    # Razer Stream Controller, and Razer Stream Controller X.
     - LoupedeckCtFamily
 
     # LoupedeckPlusFamily covers Loupedeck+ device. Uncomment the following line to support Loupedeck+.
@@ -51,6 +55,9 @@ pluginCapabilities:
 
     # Uncomment the following line if the plugin sends keyboard shortcuts to the target application.
     #- ActivatesApplication
+
+# Minimum Loupedeck version supported by the plugin.
+minimumLoupedeckVersion: 6.0
 
 
 # ==================================================================================================

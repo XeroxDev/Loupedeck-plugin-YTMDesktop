@@ -1,21 +1,28 @@
-﻿namespace Loupedeck.YTMDesktopPlugin.Actions
+﻿namespace Loupedeck.YTMDesktopPlugin.Actions;
+
+using Helpers;
+
+using XeroxDev.YTMDesktop.Companion.Exceptions;
+
+public class PreviousTrackCommand() : PluginDynamicCommand("Previous track", "Goes to previous track", "Track")
 {
-    using System;
-
-    using Services;
-
-    using Utils;
-
-    public class PreviousTrackCommand : PluginDynamicCommand
+    protected override async void RunCommand(String actionParameter)
     {
-        private SocketService SocketService { get; }
-
-        public PreviousTrackCommand() : base("Previous track", "Goes to previous track", "Track") =>
-            this.SocketService = SocketService.Instance;
-
-        protected override async void RunCommand(String actionParameter) => await this.SocketService.TrackPrevious();
-
-        protected override BitmapImage GetCommandImage(String actionParameter, PluginImageSize imageSize) =>
-            DrawingHelper.LoadBitmapImage("music-prev");
+        try
+        {
+            await (Connector.RestClient?.Previous() ?? Task.CompletedTask);
+            this.Plugin.OnPluginStatusChanged(PluginStatus.Normal, "");
+        }
+        catch (ApiException e)
+        {
+            this.Plugin.OnPluginStatusChanged(PluginStatus.Error, e.Error.ToString());
+        }
+        catch (Exception e)
+        {
+            this.Plugin.OnPluginStatusChanged(PluginStatus.Error, e.Message);
+        }
     }
+
+    protected override BitmapImage GetCommandImage(String actionParameter, PluginImageSize imageSize) =>
+        DrawingHelper.LoadBitmapImage("music-prev");
 }

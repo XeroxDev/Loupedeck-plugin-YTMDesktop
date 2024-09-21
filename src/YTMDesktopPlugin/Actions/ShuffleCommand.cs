@@ -1,22 +1,28 @@
-﻿namespace Loupedeck.YTMDesktopPlugin.Actions
+﻿namespace Loupedeck.YTMDesktopPlugin.Actions;
+
+using Helpers;
+
+using XeroxDev.YTMDesktop.Companion.Exceptions;
+
+public class ShuffleCommand() : PluginDynamicCommand("Shuffle", "Toggles shuffle", "Player")
 {
-    using System;
-
-    using Services;
-
-    using Utils;
-
-
-    public class ShuffleCommand : PluginDynamicCommand
+    protected override async void RunCommand(String actionParameter)
     {
-        private SocketService SocketService { get; }
-
-        public ShuffleCommand() : base("Shuffle", "Toggles shuffle", "Player") =>
-            this.SocketService = SocketService.Instance;
-
-        protected override async void RunCommand(String actionParameter) => await this.SocketService.PlayerShuffle();
-
-        protected override BitmapImage GetCommandImage(String actionParameter, PluginImageSize imageSize) =>
-            DrawingHelper.LoadBitmapImage($"shuffle");
+        try
+        {
+            await (Connector.RestClient?.Shuffle() ?? Task.CompletedTask);
+            this.Plugin.OnPluginStatusChanged(PluginStatus.Normal, "");
+        }
+        catch (ApiException e)
+        {
+            this.Plugin.OnPluginStatusChanged(PluginStatus.Error, e.Error.ToString());
+        }
+        catch (Exception e)
+        {
+            this.Plugin.OnPluginStatusChanged(PluginStatus.Error, e.Message);
+        }
     }
+
+    protected override BitmapImage GetCommandImage(String actionParameter, PluginImageSize imageSize) =>
+        DrawingHelper.LoadBitmapImage($"shuffle");
 }

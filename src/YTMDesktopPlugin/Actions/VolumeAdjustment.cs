@@ -1,99 +1,133 @@
-﻿namespace Loupedeck.YTMDesktopPlugin.Actions
+﻿namespace Loupedeck.YTMDesktopPlugin.Actions;
+
+using Helpers;
+
+using XeroxDev.YTMDesktop.Companion.Exceptions;
+using XeroxDev.YTMDesktop.Companion.Models.Output;
+
+public class VolumeAdjustment : PluginDynamicAdjustment
 {
-    using System;
-    using System.Reactive.Linq;
-    using System.Reactive.Subjects;
+    private Int32 _currentVolume;
+    private Int32 _lastVolume;
+    private readonly Debouncer _debouncer;
+    private Boolean _changingVolume;
 
-    using Services;
-
-    using Utils;
-
-
-    public class VolumeAdjustment : PluginDynamicAdjustment
+    protected override Boolean OnLoad()
     {
-        public static BehaviorSubject<Int32> OnVolume { get; } = new BehaviorSubject<Int32>(50);
-        public static Int32 LastVolume { get; set; } = 50;
-        private Boolean IgnoreServer { get; set; }
-        private Subject<Boolean> OnDestroy { get; } = new Subject<Boolean>();
-        private SocketService SocketService { get; }
+        Connector.OnStateChange += this.OnStateChange;
+        return base.OnLoad();
+    }
 
+    protected override Boolean OnUnload()
+    {
+        Connector.OnStateChange -= this.OnStateChange;
+        return base.OnUnload();
+    }
 
-        protected override Boolean OnLoad()
+    private void OnStateChange(Object? _, StateOutput e)
+    {
+        if (this._changingVolume)
         {
-            this.SocketService
-                .OnTick
-                .DistinctUntilChanged()
-                .TakeUntil(this.OnDestroy)
-                .Subscribe(response =>
-                {
-                    if (this.IgnoreServer)
-                    {
-                        this.IgnoreServer = false;
-                        return;
-                    }
-
-                    OnVolume.OnNext(Convert.ToInt32(response.Player.VolumePercent));
-                });
-
-            OnVolume
-                .DistinctUntilChanged()
-                .TakeUntil(this.OnDestroy)
-                .Subscribe(vol =>
-                {
-                    LastVolume = vol <= 0 ? LastVolume : vol;
-                    this.AdjustmentValueChanged();
-                });
-            return base.OnLoad();
+            return;
         }
 
-        protected override Boolean OnUnload()
+        this._currentVolume = Convert.ToInt32(Math.Floor(e.Player?.Volume ?? 0));
+        this.AdjustmentValueChanged();
+    }
+
+    public VolumeAdjustment() : base("Change volume", "Changes player volume", "Player", true)
+        => this._debouncer = new Debouncer(TimeSpan.FromMilliseconds(250), this.SetVolume);
+
+    protected override String GetCommandDisplayName(String actionParameter, PluginImageSize imageSize) => "Toggle volume";
+
+    protected override async void RunCommand(String actionParameter)
+    {
+        if (this._currentVolume <= 0)
         {
-            this.OnDestroy.OnNext(true);
-            return base.OnUnload();
-        }
+            this._currentVolume = this._lastVolume;
 
-        public VolumeAdjustment() : base("Change volume", "Changes player volume", "Player", true) =>
-            this.SocketService = SocketService.Instance;
-
-        protected override String GetCommandDisplayName(String actionParameter, PluginImageSize imageSize) => "Toggle volume";
-
-        protected override async void RunCommand(String actionParameter)
-        {
-            var vol = OnVolume.Value == 0
-                ? LastVolume
-                : -1;
-            OnVolume.OnNext(vol);
-            await this.SocketService.PlayerSetVolume(vol);
-        }
-
-        protected override async void ApplyAdjustment(String actionParameter, Int32 diff)
-        {
-            var vol = OnVolume.Value;
-            vol += diff;
-            
-            vol = vol <= 0 ? -1 : vol >= 100 ? 100 : vol;
-
-            if (vol == LastVolume)
-            {
-                return;
-            }
-
-            LastVolume = vol;
-            OnVolume.OnNext(vol);
-            this.IgnoreServer = true;
-            await this.SocketService.PlayerSetVolume(vol);
-        }
-
-        protected override BitmapImage GetAdjustmentImage(String actionParameter, PluginImageSize imageSize)
-        {
             try
             {
-                return DrawingHelper.DrawVolumeBar(imageSize, new BitmapColor(156, 156, 156), BitmapColor.White, OnVolume.Value);
+                await (Connector.RestClient?.SetVolume(this._currentVolume) ?? Task.CompletedTask);
+                this.Plugin.OnPluginStatusChanged(PluginStatus.Normal, "");
             }
-            catch (Exception)
+            catch (ApiException e)
             {
-                return base.GetAdjustmentImage(actionParameter, imageSize);
+                this.Plugin.OnPluginStatusChanged(PluginStatus.Error, e.Error.ToString());
             }
+            catch (Exception e)
+            {
+                this.Plugin.OnPluginStatusChanged(PluginStatus.Error, e.Message);
+            }
+
+            return;
+        }
+
+        this._lastVolume = this._currentVolume;
+        this._currentVolume = 0;
+
+        try
+        {
+            await (Connector.RestClient?.SetVolume(this._currentVolume) ?? Task.CompletedTask);
+            this.Plugin.OnPluginStatusChanged(PluginStatus.Normal, "");
+        }
+        catch (ApiException e)
+        {
+            this.Plugin.OnPluginStatusChanged(PluginStatus.Error, e.Error.ToString());
+        }
+        catch (Exception e)
+        {
+            this.Plugin.OnPluginStatusChanged(PluginStatus.Error, e.Message);
+        }
+    }
+
+    protected override void ApplyAdjustment(String actionParameter, Int32 diff)
+    {
+        this._changingVolume = true;
+        var vol = this._currentVolume;
+        vol += diff;
+
+        vol = vol <= 0 ? 0 : vol >= 100 ? 100 : vol;
+
+        if (vol == this._currentVolume)
+        {
+            return;
+        }
+
+        this._currentVolume = vol;
+        this._lastVolume = vol;
+
+        this._debouncer.Invoke();
+    }
+
+    private void SetVolume()
+    {
+        try
+        {
+            Connector.RestClient?.SetVolume(this._currentVolume).Wait();
+            this.Plugin.OnPluginStatusChanged(PluginStatus.Normal, "");
+        }
+        catch (ApiException e)
+        {
+            this.Plugin.OnPluginStatusChanged(PluginStatus.Error, e.Error.ToString());
+        }
+        catch (Exception e)
+        {
+            this.Plugin.OnPluginStatusChanged(PluginStatus.Error, e.Message);
+        }
+
+        this._changingVolume = false;
+    }
+
+    protected override BitmapImage GetAdjustmentImage(String actionParameter, PluginImageSize imageSize)
+    {
+        try
+        {
+            return DrawingHelper.DrawVolumeBar(imageSize, new BitmapColor(156, 156, 156), this._changingVolume ? new BitmapColor(255, 0, 0) : new BitmapColor(0, 255, 0), this._currentVolume);
+        }
+        catch (Exception)
+        {
+            return base.GetAdjustmentImage(actionParameter, imageSize);
         }
     }
 }

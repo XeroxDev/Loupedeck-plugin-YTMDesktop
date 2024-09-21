@@ -1,192 +1,163 @@
-﻿namespace Loupedeck.YTMDesktopPlugin.Actions
+﻿namespace Loupedeck.YTMDesktopPlugin.Actions;
+
+using Helpers;
+
+using XeroxDev.YTMDesktop.Companion.Enums;
+using XeroxDev.YTMDesktop.Companion.Models.Output;
+
+using static Helpers.DrawingHelper;
+
+public class TrackInfoCommand() : PluginDynamicCommand("Track Info", "Shows thumbnail, title, author and album. On push opens link to track", "Track")
 {
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Net;
-    using System.Reactive.Linq;
-    using System.Reactive.Subjects;
+    private Int32 _titleIndex;
+    private String _currentTitle = "";
+    private Int32 _authorIndex;
+    private String _currentAuthor = "";
+    private Int32 _albumIndex;
+    private String _currentAlbum = "";
+    private String _currentThumbnail = "";
+    private String _displayTitle = "Nothing";
+    private BitmapImage? _thumbnailBitmap;
 
-    using Services;
 
-    using Utils.EventArgs;
-
-    using static Utils.DrawingHelper;
-
-    public class TrackInfoCommand : PluginDynamicCommand
+    protected override Boolean OnLoad()
     {
-        private Subject<Boolean> OnDestroy { get; } = new Subject<Boolean>();
-        private SocketService SocketService { get; }
+        Connector.OnStateChange += this.OnStateChange;
+        return base.OnLoad();
+    }
 
-        private Int32 TitleIndex { get; set; }
-        private String CurrentTitle { get; set; } = "";
-        private Int32 AuthorIndex { get; set; }
-        private String CurrentAuthor { get; set; } = "";
-        private Int32 AlbumIndex { get; set; }
-        private String CurrentAlbum { get; set; } = "";
-        private String CurrentThumbnail { get; set; } = "";
-        private String CurrentUrl { get; set; } = "";
+    private void OnStateChange(Object? _, StateOutput e)
+    {
+        var data = GetSongData(e);
+        var title = data.Video?.Title;
+        var author = data.Video?.Author;
+        var album = data.Video?.Album;
+        var cover = data.Video?.Thumbnails?.Length > 0 ? data.Video?.Thumbnails[0].Url ?? null : null;
 
-        private String DisplayTitle { get; set; } = "Nothing";
-        private BitmapImage ThumbnailBitmap { get; set; }
-
-
-        public TrackInfoCommand() : base("Track Info",
-            "Shows thumbnail, title, author and album. On push opens link to track", "Track") =>
-            this.SocketService = SocketService.Instance;
-
-        protected override Boolean OnLoad()
+        if (this._currentTitle != title)
         {
-            this.SocketService.OnTick
-                .DistinctUntilChanged()
-                .TakeUntil(this.OnDestroy)
-                .Subscribe(response =>
+            this._titleIndex = 0;
+        }
+
+        if (this._currentAlbum != album)
+        {
+            this._albumIndex = 0;
+        }
+
+        if (this._currentAuthor != author)
+        {
+            this._authorIndex = 0;
+        }
+
+        if (this._currentThumbnail != cover && !String.IsNullOrEmpty(cover))
+        {
+            this._currentThumbnail = cover;
+            if (!cover.StartsWith("http"))
+            {
+                this._thumbnailBitmap = LoadBitmapImage(text: cover);
+            }
+            else
+            {
+                try
                 {
-                    var (author, title, album, cover, _, _, url, _, _, _, _) = this.GetSongData(response);
-
-                    if (this.CurrentTitle != title)
-                    {
-                        this.TitleIndex = 0;
-                    }
-
-                    if (this.CurrentAlbum != album)
-                    {
-                        this.AlbumIndex = 0;
-                    }
-
-                    if (this.CurrentAuthor != author)
-                    {
-                        this.AuthorIndex = 0;
-                    }
-
-                    if (this.CurrentThumbnail != cover)
-                    {
-                        this.CurrentThumbnail = cover;
-                        if (!cover.StartsWith("http"))
-                        {
-                            this.ThumbnailBitmap = LoadBitmapImage(text: cover);
-                        }
-                        else
-                        {
-                            try
-                            {
-                                using (var ms = new MemoryStream())
-                                {
-                                    GetImageAsStream(cover).CopyTo(ms);
-                                    this.ThumbnailBitmap = BitmapImage.FromArray(ms.ToArray());
-                                }
-                            }
-                            catch
-                            {
-                                this.ThumbnailBitmap = LoadBitmapImage(text: "Not found");
-                            }
-                        }
-
-                        this.ThumbnailBitmap.Resize(90, 90);
-                    }
-
-                    this.CurrentTitle = title;
-                    this.CurrentAuthor = author;
-                    this.CurrentAlbum = album;
-                    this.CurrentThumbnail = cover;
-                    this.CurrentUrl = url;
-
-                    var displayTitle = this.CurrentTitle;
-                    var displayAlbum = this.CurrentAlbum == displayTitle ? "" : this.CurrentAlbum;
-                    var displayAuthor = this.CurrentAuthor == this.CurrentTitle ? "" : this.CurrentAuthor;
-
-                    var max = 7;
-                    if (String.IsNullOrEmpty(displayTitle)
-                        && String.IsNullOrEmpty(displayAlbum)
-                        && String.IsNullOrEmpty(displayAuthor))
-                    {
-                        return;
-                    }
-
-                    if (this.CurrentTitle.Length > max && !String.IsNullOrEmpty(displayTitle))
-                    {
-                        displayTitle =
-                            this.GetScrollingText("".PadLeft(max, '.') + displayTitle + "".PadLeft(max, '.'),
-                                this.TitleIndex, max);
-                        this.TitleIndex++;
-                        if (this.CurrentTitle.Length - this.TitleIndex + max * 2 < max)
-                        {
-                            this.TitleIndex = 0;
-                        }
-                    }
-
-                    if (this.CurrentAuthor.Length > max && !String.IsNullOrEmpty(displayAuthor))
-                    {
-                        displayAuthor =
-                            this.GetScrollingText("".PadLeft(max, '.') + displayAuthor + "".PadLeft(max, '.'),
-                                this.AuthorIndex, max);
-                        this.AuthorIndex++;
-                        if (this.CurrentAuthor.Length - this.AuthorIndex + max * 2 < max)
-                        {
-                            this.AuthorIndex = 0;
-                        }
-                    }
-
-                    if (this.CurrentAlbum.Length > max && !String.IsNullOrEmpty(displayAlbum))
-                    {
-                        displayAlbum =
-                            this.GetScrollingText("".PadLeft(max, '.') + displayAlbum + "".PadLeft(max, '.'),
-                                this.AlbumIndex, max);
-                        this.AlbumIndex++;
-                        if (this.CurrentAlbum.Length - this.AlbumIndex + max * 2 < max)
-                        {
-                            this.AlbumIndex = 0;
-                        }
-                    }
-
-                    this.DisplayTitle = $"{displayTitle}\n{displayAlbum}\n{displayAuthor}";
-                    this.ActionImageChanged();
-                });
-            return base.OnLoad();
-        }
-
-        private TrackInfo GetSongData(TrackAndPlayer data)
-        {
-            var hasSong = data.Player.HasSong;
-            var isPaused = data.Player.IsPaused;
-
-            if (isPaused)
-            {
-                data.Track.Title = "Paused";
-                data.Track.Author = "Paused";
-                data.Track.Album = "Paused";
-            }
-            else if (!hasSong)
-            {
-                data.Track.Cover = "N/A";
-                data.Track.Title = "N/A";
-                data.Track.Author = "N/A";
-                data.Track.Album = "N/A";
+                    using var ms = new MemoryStream();
+                    GetImageAsStream(cover).CopyTo(ms);
+                    this._thumbnailBitmap = BitmapImage.FromArray(ms.ToArray());
+                }
+                catch
+                {
+                    this._thumbnailBitmap = LoadBitmapImage(text: "Not found");
+                }
             }
 
-            return data.Track;
+            this._thumbnailBitmap.Resize(90, 90);
         }
 
-        private String GetScrollingText(String text, Int32 index, Int32 max) => text.Substring(index, max);
+        this._currentTitle = title ?? this._currentTitle;
+        this._currentAuthor = author ?? this._currentAuthor;
+        this._currentAlbum = album ?? this._currentAlbum;
+        this._currentThumbnail = cover ?? this._currentThumbnail;
 
+        var displayTitle = this._currentTitle;
+        var displayAlbum = this._currentAlbum == displayTitle ? "" : this._currentAlbum;
+        var displayAuthor = this._currentAuthor == this._currentTitle ? "" : this._currentAuthor;
 
-        protected override Boolean OnUnload()
+        const Int32 max = 7;
+        if (String.IsNullOrEmpty(displayTitle)
+            && String.IsNullOrEmpty(displayAlbum)
+            && String.IsNullOrEmpty(displayAuthor))
         {
-            this.OnDestroy.OnNext(true);
-            return base.OnUnload();
+            return;
         }
 
-        protected override void RunCommand(String actionParameter) => Process.Start(this.CurrentUrl);
-
-        protected override BitmapImage GetCommandImage(String actionParameter, PluginImageSize imageSize) =>
-            LoadBitmapImage(this.ThumbnailBitmap,
-                this.SocketService.IsConnected.Value ? this.DisplayTitle : "Not connected");
-
-        private static Stream GetImageAsStream(String urlImage)
+        if (this._currentTitle.Length > max && !String.IsNullOrEmpty(displayTitle))
         {
-            var request = WebRequest.Create(urlImage);
-            var response = request.GetResponse();
-            return response.GetResponseStream();
+            displayTitle =
+                GetScrollingText("".PadLeft(max, '.') + displayTitle + "".PadLeft(max, '.'),
+                    this._titleIndex, max);
+            this._titleIndex++;
+            if (this._currentTitle.Length - this._titleIndex + max * 2 < max)
+            {
+                this._titleIndex = 0;
+            }
         }
+
+        if (this._currentAuthor.Length > max && !String.IsNullOrEmpty(displayAuthor))
+        {
+            displayAuthor =
+                GetScrollingText("".PadLeft(max, '.') + displayAuthor + "".PadLeft(max, '.'),
+                    this._authorIndex, max);
+            this._authorIndex++;
+            if (this._currentAuthor.Length - this._authorIndex + max * 2 < max)
+            {
+                this._authorIndex = 0;
+            }
+        }
+        
+        if (this._currentAlbum.Length > max && !String.IsNullOrEmpty(displayAlbum))
+        {
+            displayAlbum =
+                GetScrollingText("".PadLeft(max, '.') + displayAlbum + "".PadLeft(max, '.'),
+                    this._albumIndex, max);
+            this._albumIndex++;
+            if (this._currentAlbum.Length - this._albumIndex + max * 2 < max)
+            {
+                this._albumIndex = 0;
+            }
+        }
+
+        this._displayTitle = $"{displayTitle}\n{displayAlbum}\n{displayAuthor}";
+        this.ActionImageChanged();
+    }
+
+    private static StateOutput GetSongData(StateOutput data)
+    {
+        var isPaused = (data.Player?.TrackState ?? ETrackState.Unknown) == ETrackState.Paused;
+
+        if (!isPaused)
+        {
+            return data;
+        }
+
+        data.Video.Title = "Paused";
+        data.Video.Author = "Paused";
+        data.Video.Album = "Paused";
+
+        return data;
+    }
+
+    private static String GetScrollingText(String text, Int32 index, Int32 max) => text.Substring(index, max);
+
+    protected override void RunCommand(String actionParameter) => this.Plugin.OnPluginStatusChanged(PluginStatus.Normal, "");
+
+    protected override BitmapImage GetCommandImage(String actionParameter, PluginImageSize imageSize) =>
+        this._thumbnailBitmap is null
+            ? LoadBitmapImage(text: "Not found")
+            : LoadBitmapImage(this._thumbnailBitmap, Connector.ConnectionState == ESocketState.Connected ? this._displayTitle : Enum.GetName(typeof(ESocketState), Connector.ConnectionState));
+
+    private static Stream GetImageAsStream(String urlImage)
+    {
+        using var client = new HttpClient();
+        return client.GetStreamAsync(urlImage).Result;
     }
 }

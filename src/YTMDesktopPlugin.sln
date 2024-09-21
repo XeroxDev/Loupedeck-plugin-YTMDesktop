@@ -1,9 +1,9 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30128.74
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34408.163
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YTMDesktopPlugin", "YTMDesktopPlugin\YTMDesktopPlugin.csproj", "{EE024601-8AB8-4392-8DAF-7633FB74D618}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YTMDesktopPlugin", "YTMDesktopPlugin\YTMDesktopPlugin.csproj", "{794BBAC8-AC59-47A7-9470-F0AC66C57C4B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EE024601-8AB8-4392-8DAF-7633FB74D618}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EE024601-8AB8-4392-8DAF-7633FB74D618}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EE024601-8AB8-4392-8DAF-7633FB74D618}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EE024601-8AB8-4392-8DAF-7633FB74D618}.Release|Any CPU.Build.0 = Release|Any CPU
+		{794BBAC8-AC59-47A7-9470-F0AC66C57C4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{794BBAC8-AC59-47A7-9470-F0AC66C57C4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{794BBAC8-AC59-47A7-9470-F0AC66C57C4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{794BBAC8-AC59-47A7-9470-F0AC66C57C4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {DD2541DF-D3B8-438F-B384-5B7AF1440E9E}
+		SolutionGuid = {0D3D279B-558D-4DC2-BAAE-C6CB7C2C45F6}
 	EndGlobalSection
 EndGlobal

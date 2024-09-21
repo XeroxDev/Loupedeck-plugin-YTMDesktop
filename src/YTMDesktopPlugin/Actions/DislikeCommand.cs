@@ -1,52 +1,62 @@
-﻿namespace Loupedeck.YTMDesktopPlugin.Actions
+﻿namespace Loupedeck.YTMDesktopPlugin.Actions;
+
+using Helpers;
+
+using XeroxDev.YTMDesktop.Companion.Enums;
+using XeroxDev.YTMDesktop.Companion.Exceptions;
+using XeroxDev.YTMDesktop.Companion.Models.Output;
+
+public class DislikeCommand : PluginMultistateDynamicCommand
 {
-    using System;
-    using System.Reactive.Linq;
-    using System.Reactive.Subjects;
+    private Boolean _disliked;
 
-    using Services;
-
-    using Utils;
-
-    public class DislikeCommand : PluginMultistateDynamicCommand
+    public DislikeCommand() : base("Dislike", "Dislikes track", "Track")
     {
-        private SocketService SocketService { get; }
-        private Subject<Boolean> OnDestroy { get; } = new Subject<Boolean>();
-
-        private Boolean Disliked { get; set; }
-
-        public DislikeCommand() : base("Dislike", "Dislikes track", "Track")
-        {
-            this.AddState("Neutral", "If current song is not disliked");
-            this.AddState("Disliked", "If current song is disliked");
-            
-            this.SocketService = SocketService.Instance;
-        }
-
-        protected override Boolean OnLoad()
-        {
-            this.SocketService.OnTick
-                .Select(response => response.Player.LikeStatus == "DISLIKE")
-                .DistinctUntilChanged(b => b == this.Disliked)
-                .TakeUntil(this.OnDestroy)
-                .Subscribe(disliked =>
-                {
-                    this.Disliked = disliked;
-                    this.SetCurrentState(disliked ? 1 : 0);
-                    this.ActionImageChanged();
-                });
-            return base.OnLoad();
-        }
-
-        protected override Boolean OnUnload()
-        {
-            this.OnDestroy.OnNext(true);
-            return base.OnUnload();
-        }
-
-        protected override async void RunCommand(String actionParameter) => await this.SocketService.TrackThumbsDown();
-
-        protected override BitmapImage GetCommandImage(String actionParameter, Int32 state, PluginImageSize imageSize) =>
-            DrawingHelper.LoadBitmapImage($"dislike-{(state == 1 ? "on" : "off")}");
+        this.AddState("Neutral", "If current song is not disliked");
+        this.AddState("Disliked", "If current song is disliked");
     }
+
+    protected override Boolean OnLoad()
+    {
+        Connector.OnStateChange += this.OnStateChange;
+        return base.OnLoad();
+    }
+
+    protected override Boolean OnUnload()
+    {
+        Connector.OnStateChange -= this.OnStateChange;
+        return base.OnUnload();
+    }
+
+    private void OnStateChange(Object? sender, StateOutput e)
+    {
+        if (e.Video?.LikeStatus is null or ELikeStatus.Unknown)
+        {
+            return;
+        }
+
+        this._disliked = e.Video.LikeStatus == ELikeStatus.Dislike;
+        this.SetCurrentState(this._disliked ? 1 : 0);
+        this.ActionImageChanged();
+    }
+
+    protected override async void RunCommand(String actionParameter)
+    {
+        try
+        {
+            await (Connector.RestClient?.ToggleDislike() ?? Task.CompletedTask);
+            this.Plugin.OnPluginStatusChanged(PluginStatus.Normal, "");
+        }
+        catch (ApiException e)
+        {
+            this.Plugin.OnPluginStatusChanged(PluginStatus.Error, e.Error.ToString());
+        }
+        catch (Exception e)
+        {
+            this.Plugin.OnPluginStatusChanged(PluginStatus.Error, e.Message);
+        }
+    }
+
+    protected override BitmapImage GetCommandImage(String actionParameter, Int32 state, PluginImageSize imageSize) =>
+        DrawingHelper.LoadBitmapImage($"dislike-{(state == 1 ? "on" : "off")}");
 }
