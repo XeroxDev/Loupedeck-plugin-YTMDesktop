@@ -1,0 +1,91 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Loupedeck.YTMDesktopPlugin</RootNamespace>
+
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+
+    <PluginApiDir Condition="$(OS) == 'Windows_NT'">C:\Program Files\Logi\LogiPluginService\</PluginApiDir>
+    <PluginApiDir Condition="$(OS) != 'Windows_NT'">/Applications/Utilities/LogiPluginService.app/Contents/MonoBundle/</PluginApiDir>
+
+    <PluginDir Condition="$(OS) == 'Windows_NT'">$(LocalAppData)\Logi\LogiPluginService\Plugins\</PluginDir>
+    <PluginDir Condition="$(OS) != 'Windows_NT'">~/Library/Application\ Support/Logi/LogiPluginService/Plugins/</PluginDir>
+    <Company>XeroxDev</Company>
+    <!-- x-release-please-start-version -->
+    <AssemblyVersion>2.1.0</AssemblyVersion>
+    <FileVersion>2.1.0</FileVersion>
+    <Version>2.1.0</Version>
+    <PackageVersion>2.1.0</PackageVersion>
+    <!-- x-release-please-end -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="PluginApi">
+      <HintPath>$(PluginApiDir)PluginApi.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Images\clear.png" />
+    <EmbeddedResource Include="Resources\Images\clear.png" />
+    <None Remove="Resources\Images\dislike-off.png" />
+    <EmbeddedResource Include="Resources\Images\dislike-off.png" />
+    <None Remove="Resources\Images\dislike-on.png" />
+    <EmbeddedResource Include="Resources\Images\dislike-on.png" />
+    <None Remove="Resources\Images\like-off.png" />
+    <EmbeddedResource Include="Resources\Images\like-off.png" />
+    <None Remove="Resources\Images\like-on.png" />
+    <EmbeddedResource Include="Resources\Images\like-on.png" />
+    <None Remove="Resources\Images\music-next.png" />
+    <EmbeddedResource Include="Resources\Images\music-next.png" />
+    <None Remove="Resources\Images\music-pause.png" />
+    <EmbeddedResource Include="Resources\Images\music-pause.png" />
+    <None Remove="Resources\Images\music-play.png" />
+    <EmbeddedResource Include="Resources\Images\music-play.png" />
+    <None Remove="Resources\Images\music-prev.png" />
+    <EmbeddedResource Include="Resources\Images\music-prev.png" />
+    <None Remove="Resources\Images\repeat.png" />
+    <EmbeddedResource Include="Resources\Images\repeat.png" />
+    <None Remove="Resources\Images\shuffle.png" />
+    <EmbeddedResource Include="Resources\Images\shuffle.png" />
+    <None Remove="Resources\Images\volume-down.png" />
+    <EmbeddedResource Include="Resources\Images\volume-down.png" />
+    <None Remove="Resources\Images\volume-mute.png" />
+    <EmbeddedResource Include="Resources\Images\volume-mute.png" />
+    <None Remove="Resources\Images\volume-on.png" />
+    <EmbeddedResource Include="Resources\Images\volume-on.png" />
+    <None Remove="Resources\Images\volume-up.png" />
+    <EmbeddedResource Include="Resources\Images\volume-up.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="XeroxDev.YTMDesktop.Companion" Version="1.1.2" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Condition="$(OS) == 'Windows_NT'" Command="echo $(OutputPath) &gt; &quot;$(PluginDir)$(ProjectName).link&quot;" />
+    <Exec Condition="$(OS) != 'Windows_NT'" Command="echo $(OutputPath) &gt; $(PluginDir)$(ProjectName).link" />
+  </Target>
+
+  <Target Name="CopyMetadata" AfterTargets="PostBuildEvent">
+    <ItemGroup>
+      <MetadataFiles Include="metadata\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(MetadataFiles)" DestinationFolder="$(OutputPath)metadata" />
+  </Target>
+
+  <Target Name="PluginClean" AfterTargets="CoreClean">
+    <Delete Condition="$(OS) == 'Windows_NT'" Files="$(PluginDir)$(ProjectName).link" />
+    <Exec   Condition="$(OS) != 'Windows_NT'" Command="rm -f $(PluginDir)$(ProjectName).link" />
+
+    <RemoveDir Directories="$(OutputPath)metadata" />
+  </Target>
+
+</Project>
