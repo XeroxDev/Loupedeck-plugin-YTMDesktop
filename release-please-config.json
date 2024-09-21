@@ -9,7 +9,8 @@
       "prerelease": false,
       "include-component-in-tag": false,
       "extra-files": [
-        "src/YTMDesktopPlugin/YTMDesktopPlugin.csproj"
+        "src/YTMDesktopPlugin/YTMDesktopPlugin.csproj",
+        "src/YTMDesktopPlugin/metadata/LoupedeckPackage.yaml"
       ]
     }
   },

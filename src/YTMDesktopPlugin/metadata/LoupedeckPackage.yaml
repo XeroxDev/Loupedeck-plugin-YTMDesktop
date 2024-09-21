@@ -18,7 +18,7 @@ description: This Plugin allows you to control the YouTube Music Desktop App
 pluginFileName: YTMDesktopPlugin.dll
 
 # Plugin version.
-version: 2.1.0
+version: 3.0.0
 
 # Author of the plugin. The author can be a company or an individual developer.
 author: XeroxDev
