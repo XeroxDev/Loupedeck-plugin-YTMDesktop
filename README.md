@@ -59,7 +59,7 @@ You can also join my discord [here](https://s.tswi.me/discord)
 # 6. How to use it?
 
 > [!NOTE]
-> This is just a simplified version, please visit the [official documentation](https://help.xeroxdev.de/en/stream-deck/ytmd/home#h-5-how-to-use-it) for a more detailed guide.
+> This is just a simplified version, please visit the [official documentation](https://help.xeroxdev.de/en/loupedeck/ytmd/home/#5-how-to-use-it) for a more detailed guide.
 
 1. Install the [YouTube Music Desktop App](https://github.com/ytmdesktop/ytmdesktop).
 2. Install the Plugin from [Releases](https://github.com/XeroxDev/Loupedeck-plugin-YTMDesktop/releases)
