@@ -30,7 +30,7 @@
 This Loupedeck Plugin allows you to control the [YouTube Music Desktop App](https://github.com/ytmdesktop/ytmdesktop)
 
 > [!NOTE]
-> We don't support v1.13.0 or lower, we recommend updating to the latest Nightly pre-release
+> We only support version 2.x.x and above, if you are using an older version, please update to the latest version.
 
 # 4. Support / Feedback
 You found a bug? You have a feature request? I would love to hear about it [here](https://github.com/XeroxDev/Loupedeck-plugin-YTMDesktop/issues/new/choose) or click on the "Issues" tab here on the GitHub repositorie!
@@ -58,16 +58,18 @@ You can also join my discord [here](https://s.tswi.me/discord)
 
 # 6. How to use it?
 
+> [!NOTE]
+> This is just a simplified version, please visit the [official documentation](https://help.xeroxdev.de/en/stream-deck/ytmd/home#h-5-how-to-use-it) for a more detailed guide.
+
 1. Install the [YouTube Music Desktop App](https://github.com/ytmdesktop/ytmdesktop).
 2. Install the Plugin from [Releases](https://github.com/XeroxDev/Loupedeck-plugin-YTMDesktop/releases)
-3. Add Actions to your Loupedeck.
-4. Activate the Companion Server / Remote control from YTMD App
-    - Settings > Integration > "Enable Companion Server" or "Remote control" (Should be the first entry with an open icon)
-5. Click on the open Icon or go to http://localhost:9863/ (Default)
-6. Optional: Activate password protection. else go to 7.
-7. Add “Open settings” action and touch it
-8. Add all settings. (Host, Port, Password)
-9. Click save
+3. Add a settings profile action, fill out everything and click save.
+4. Make sure the YouTube Music Desktop App and the Companion Server is running
+   - Settings > Integration > Enable "Companion Server"
+5. Turn on "enable companion authorization" under the Companion Server
+6. Press the Profile button on your device
+7. Compare the authorization code displaying by the plugin with the one displaying in the YouTube Music Desktop App and if they match, confirm the authorization in the YouTube Music Desktop App
+8. If you've gotten no error and the plugin is now displayed in the "Authorized companions" list of YouTube Music Desktop, you can now use the plugin
 
 # 7. How to contribute?
 
